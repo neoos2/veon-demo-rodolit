@@ -1,0 +1,70 @@
+/* Rodolit — shared typography, buttons and page rhythm. Tokens only (src/styles/tokens.css). */
+html { overflow-x: clip; }
+body { overflow-x: clip; }
+html { scrollbar-color: var(--color-control) var(--color-well); }
+body {
+  font-size: var(--fs-body);
+  font-weight: 400;
+  font-synthesis: none;
+  font-variant-numeric: lining-nums;
+  caret-color: var(--color-accent);
+}
+::selection { background: var(--color-accent); color: var(--color-accent-ink); }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; color: var(--color-text); }
+h1 { font-size: var(--fs-h1); line-height: 1.04; letter-spacing: -0.02em; }
+h2 { font-size: var(--fs-h2); line-height: 1.08; letter-spacing: -0.015em; }
+h3 { font-size: var(--fs-h3); line-height: 1.15; letter-spacing: -0.01em; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+.num { font-family: var(--font-display); font-weight: 600; font-variant-numeric: lining-nums tabular-nums; }
+.muted { color: var(--color-muted); }
+.cap { font-size: var(--fs-cap); line-height: 1.45; color: var(--color-muted); }
+.lead { font-size: var(--fs-lead); line-height: 1.45; }
+
+/* Section head: title left, short note under it. No eyebrows. */
+.section-head { display: grid; gap: var(--space-4); max-width: 46rem; }
+.section-head p { color: var(--color-muted); }
+
+/* Buttons: one primary recipe, one secondary, one inverse for the field. */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: var(--control-h); padding: 0 var(--space-5);
+  font: 700 var(--fs-body)/1.2 var(--font-body);
+  text-decoration: none; border-radius: var(--radius); border: var(--rule-w) solid transparent;
+  cursor: pointer; white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-press) var(--ease-out);
+}
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn--primary:hover { background: var(--color-accent-hover); }
+.btn--secondary { background: transparent; color: var(--color-text); border-color: var(--color-control); }
+.btn--secondary:hover { background: var(--color-well); border-color: var(--color-text); }
+.btn--inverse { background: var(--color-on-field); color: var(--color-field); }
+.btn--inverse:hover { background: var(--color-focus-on-field); }
+.btn--line-inverse { background: transparent; color: var(--color-on-field); border-color: var(--color-on-field-muted); }
+.btn--line-inverse:hover { border-color: var(--color-on-field); background: var(--color-accent-hover); }
+.btn .icon { flex: none; }
+.btn:disabled, .btn[aria-disabled="true"] { cursor: default; }
+.btn--secondary[aria-disabled="true"] { color: var(--color-muted); border-style: dashed; }
+.btn--secondary[aria-disabled="true"]:hover { background: transparent; border-color: var(--color-control); }
+.btn--secondary[aria-disabled="true"]:active { transform: none; }
+
+/* Inline action link (phone as text, «Запитати ціну»). */
+.text-link {
+  display: inline-flex; align-items: center; gap: var(--space-2); min-height: 2.75rem;
+  color: var(--color-accent); font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.text-link:hover { color: var(--color-accent-hover); text-decoration-thickness: 2px; }
+
+/* FutureLink skin for this site: reads as a quiet link, never as an error. */
+.future-link { color: inherit; }
+.future-link:focus-visible { outline: var(--ring-w) solid var(--color-accent); outline-offset: var(--ring-w); }
+.fl-quiet { text-decoration: underline dotted var(--color-control); text-decoration-thickness: 1px; text-underline-offset: 0.25em; min-height: 2.75rem; }
+.fl-quiet:hover { text-decoration-color: var(--color-text); }
+.future-link--end .future-link__note { left: auto; right: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:active { transform: none; }
+}

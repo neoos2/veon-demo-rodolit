@@ -1,0 +1,48 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Catalog from "../components/Catalog.astro";
+import Procurement from "../components/Procurement.astro";
+import Trust from "../components/Trust.astro";
+import Order from "../components/Order.astro";
+import Request from "../components/Request.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import { contacts } from "../data/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "Родоліт",
+      legalName: contacts.legalName,
+      identifier: { "@type": "PropertyValue", propertyID: "ЄДРПОУ", value: contacts.edrpou },
+      address: { "@type": "PostalAddress", postalCode: "79035", addressLocality: "Львів", streetAddress: "вул. Зелена, 115Б, к. 310", addressCountry: "UA" },
+      telephone: "+380732366471",
+      email: contacts.email,
+      contactPoint: [
+        { "@type": "ContactPoint", telephone: "+380732366471", contactType: "sales", areaServed: "UA", availableLanguage: "uk" },
+        { "@type": "ContactPoint", telephone: "+380634779310", contactType: "customer support", areaServed: "UA", availableLanguage: "uk" },
+      ],
+      sameAs: [contacts.instagram, contacts.youtube, contacts.telegramChannel],
+    },
+    { "@type": "WebSite", name: "Родоліт", inLanguage: "uk" },
+  ],
+};
+---
+<Base lang="uk" title="Медичне обладнання для лікарень і клінік — Родоліт, Львів" description="Медичне й реабілітаційне обладнання для лікарень, клінік і фондів: тендерний супровід, оплата за рахунком з ПДВ, доставка по Україні. Запит ціни та КП.">
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <Header slot="header" />
+  <Hero />
+  <Catalog />
+  <Procurement />
+  <Trust />
+  <Order />
+  <Request />
+  <Fragment slot="footer">
+    <Footer />
+    <MobileBar />
+  </Fragment>
+</Base>

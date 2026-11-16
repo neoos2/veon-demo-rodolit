@@ -1,0 +1,37 @@
+---
+import Icon from "./Icon.astro";
+import { contacts } from "../data/site";
+---
+<nav class="action-bar" aria-label="Швидкі дії" data-rec="R-UX-002">
+  <a href={contacts.sales.href}><Icon name="phone" size={22} /><span>Подзвонити</span></a>
+  <a href={contacts.viber}><Icon name="viber" size={22} /><span>Viber</span></a>
+  <a href="#request"><Icon name="mail" size={22} /><span>Запит КП</span></a>
+</nav>
+
+<style is:global>
+  .action-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: var(--bar-h); padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-field); color: var(--color-on-field);
+  }
+  .action-bar a {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-1);
+    min-height: var(--bar-h); text-decoration: none; font-size: var(--fs-cap); font-weight: 700;
+    transition: background-color var(--dur-press) var(--ease-out), transform var(--dur-press) var(--ease-out);
+  }
+  .action-bar a + a { border-left: var(--rule-w) solid var(--color-accent); }
+  .action-bar a:hover { background: var(--color-accent-hover); }
+  .action-bar a:active { transform: scale(.98); background: var(--color-accent); }
+  .action-bar a:focus-visible { outline: var(--ring-w) solid var(--color-focus-on-field); outline-offset: calc(-1 * var(--space-1)); }
+  html { scroll-padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom)); }
+  body { padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom)); }
+  @media (min-width: 64em) {
+    .action-bar { display: none; }
+    html { scroll-padding-bottom: 0; }
+    body { padding-bottom: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .action-bar a:active { transform: none; }
+  }
+</style>

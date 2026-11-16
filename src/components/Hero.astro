@@ -1,0 +1,96 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { contacts, directions, FUTURE_NOTE, SNAPSHOT_DATE } from "../data/site";
+---
+<Section id="hero" rec="R-UX-001,R-SEO-001,R-SPD-013" class="hero">
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <h1>Медичне й реабілітаційне обладнання для лікарень, клінік і фондів</h1>
+      <p class="lead hero__lead">Постачаємо зі Львова по всій Україні окремі апарати й комплексне оснащення відділень, з тендерним супроводом і оплатою за рахунком з ПДВ або без.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary hero__cta" href="#request">Запит ціни / КП</a>
+        <a class="text-link hero__phone" href={contacts.sales.href}>
+          <Icon name="phone" />
+          <span>Подзвонити <span class="num">{contacts.sales.text}</span></span>
+        </a>
+      </div>
+    </div>
+
+    <nav class="hero__index" aria-labelledby="index-title" data-rec="R-UX-002,R-SEO-001">
+      <p class="hero__index-title cap" id="index-title">Розділи каталогу, позицій на {SNAPSHOT_DATE}</p>
+      <ul>
+        {directions.map((d, i) => (
+          <li data-reveal style={`--reveal-delay:${i * 40}ms`}>
+            <FutureLink note={FUTURE_NOTE} class="index-row">
+              <span class="index-row__num num">{d.count}</span>
+              <span class="index-row__name">{d.name}</span>
+              <Icon name="arrow" size={18} class="index-row__arrow" />
+            </FutureLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</Section>
+
+<style is:global>
+  .hero { padding-block: var(--space-6) var(--space-section); }
+  .hero__grid { display: grid; gap: var(--space-7); }
+  .hero__text { display: grid; gap: var(--space-5); align-content: start; max-width: 46rem; }
+  .hero__lead { max-width: 36rem; color: var(--color-text); }
+  .hero__actions { display: grid; gap: var(--space-3); margin-top: var(--space-2); }
+  .hero__cta { width: 100%; }
+  .hero__phone { justify-self: start; color: var(--color-text); }
+  .hero__phone .icon { color: var(--color-accent); }
+
+  .hero__index-title { padding-bottom: var(--space-3); border-bottom: var(--rule-w) solid var(--color-text); }
+  .hero__index ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+  .hero__index li { border-bottom: var(--rule-w) solid var(--color-rule); }
+
+  .index-row {
+    position: relative; display: grid; width: 100%;
+    grid-template-columns: 1fr; gap: var(--space-1);
+    padding-block: var(--space-3) var(--space-4);
+    transition: background-color var(--dur-press) var(--ease-out);
+  }
+  .index-row::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: calc(-1 * var(--rule-w)); height: var(--rule-w);
+    background: var(--color-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--dur-line) var(--ease-out);
+  }
+  .index-row__num { font-size: var(--fs-num); line-height: 1; }
+  .index-row__name { line-height: 1.3; }
+  .index-row__arrow { display: none; color: var(--color-accent); transition: transform var(--dur-line) var(--ease-out); }
+  .index-row:hover::after, .index-row:focus-visible::after { transform: scaleX(1); }
+  .index-row:hover .index-row__arrow, .index-row:focus-visible .index-row__arrow { transform: translateX(var(--space-1)); }
+  .index-row:active { background: var(--color-well); }
+
+  /* Effect 1 «filling the specification»: rows appear one by one; phones get opacity only. */
+  .js .hero__index li[data-reveal]:not(.is-visible) { transform: none; }
+  .hero__index li[data-reveal] { transition-duration: 300ms; }
+
+  @media (min-width: 40em) {
+    .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-5); }
+    .hero__cta { width: auto; }
+  }
+  @media (min-width: 64em) {
+    .hero { padding-block: var(--space-5) var(--space-8); }
+    .hero__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; min-height: min(calc(100svh - var(--header-h) - var(--space-5) - var(--space-8) - var(--space-1)), 50rem); }
+    .hero__text { grid-column: 1 / span 7; }
+    .hero__index { grid-column: 8 / span 5; }
+    .hero__index ul { grid-template-columns: 1fr; }
+    .index-row { grid-template-columns: 4.5rem minmax(0, 1fr) auto; align-items: baseline; gap: var(--space-4); padding-block: var(--space-2); }
+    .index-row__arrow { display: block; align-self: center; }
+    .js .hero__index li[data-reveal]:not(.is-visible) { transform: translateY(var(--space-2)); }
+    .hero__index li[data-reveal] { transition-duration: 240ms; }
+  }
+  @media (hover: none) {
+    .index-row::after { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .index-row::after, .index-row__arrow { transition: none; }
+    .index-row:hover .index-row__arrow, .index-row:focus-visible .index-row__arrow { transform: none; }
+  }
+</style>

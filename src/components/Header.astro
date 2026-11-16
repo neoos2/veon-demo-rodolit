@@ -1,0 +1,177 @@
+---
+import { Image } from "astro:assets";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import logo from "../assets/logo-rodolit.png";
+import { contacts, FUTURE_NOTE, mailto } from "../data/site";
+
+const nav = [
+  { href: "#catalog", text: "Каталог" },
+  { href: "#procurement", text: "Як закупити" },
+  { href: "#trust", text: "Листи та документи" },
+  { href: "#order", text: "Умови поставки" },
+  { href: "#request", text: "Контакти" },
+];
+---
+<header class="site-header" data-header data-rec="R-UX-004">
+  <div class="container site-header__row">
+    <a class="site-header__logo" href="#hero">
+      <Image src={logo} alt="Родоліт" width={156} height={39} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <nav class="site-header__nav" aria-label="Розділи головної">
+      <ul>
+        {nav.map((n) => <li><a href={n.href}>{n.text}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-header__tools">
+      <FutureLink note={FUTURE_NOTE} class="site-header__tool">
+        <Icon name="search" />
+        <span class="visually-hidden">Пошук по каталогу</span>
+      </FutureLink>
+      <span class="site-header__lang">
+        <span aria-current="true" class="site-header__lang-on">UA</span>
+        <FutureLink note={FUTURE_NOTE} class="site-header__tool future-link--end"><span lang="ru">RU</span></FutureLink>
+      </span>
+      <a class="site-header__phone num" href={contacts.sales.href}>{contacts.sales.text}</a>
+      <a class="btn btn--primary site-header__cta" href="#request">Запит ціни / КП</a>
+    </div>
+
+    <a class="site-header__icon site-header__call" href={contacts.sales.href} aria-label={`Подзвонити у відділ продажу ${contacts.sales.text}`}>
+      <Icon name="phone" size={22} />
+    </a>
+
+    <details class="menu" data-menu>
+      <summary class="site-header__icon menu__toggle" aria-label="Меню">
+        <Icon name="menu" size={24} class="menu__open" />
+        <Icon name="close" size={24} class="menu__close" />
+      </summary>
+      <div class="menu__panel">
+        <nav aria-label="Розділи головної (меню)">
+          <ul class="menu__nav">
+            {nav.map((n) => <li><a href={n.href}>{n.text}</a></li>)}
+          </ul>
+        </nav>
+        <ul class="menu__channels" aria-label="Зв’язатися">
+          <li><a href={contacts.sales.href}><Icon name="phone" /><span>Продаж <span class="num">{contacts.sales.text}</span></span></a></li>
+          <li><a href={contacts.viber}><Icon name="viber" /><span>Viber</span></a></li>
+          <li><a href={contacts.telegram}><Icon name="telegram" /><span>Telegram</span></a></li>
+          <li><a href={mailto("Запит КП")}><Icon name="mail" /><span>{contacts.email}</span></a></li>
+        </ul>
+        <div class="menu__extra">
+          <FutureLink note={FUTURE_NOTE} class="fl-quiet">Пошук по каталогу</FutureLink>
+          <FutureLink note={FUTURE_NOTE} class="fl-quiet"><span lang="ru">Російська версія</span></FutureLink>
+        </div>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style is:global>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--color-bg);
+    border-bottom: var(--rule-w) solid transparent;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .site-header.is-scrolled { border-bottom-color: var(--color-rule); }
+  .site-header__row { display: flex; align-items: center; gap: var(--space-5); min-height: var(--header-h); }
+  .site-header__logo { display: inline-flex; flex: none; margin-right: auto; padding-block: var(--space-2); }
+  .site-header__logo img { width: 7.5rem; height: auto; }
+
+  .site-header__nav, .site-header__tools { display: none; }
+  .site-header__nav ul { display: flex; gap: var(--space-5); }
+  .site-header__nav a {
+    position: relative; display: inline-flex; align-items: center; min-height: 2.75rem;
+    text-decoration: none; font-weight: 400; white-space: nowrap;
+  }
+  .site-header__nav a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: var(--space-2); height: var(--rule-w);
+    background: var(--color-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--dur-line) var(--ease-out);
+  }
+  .site-header__nav a:hover::after, .site-header__nav a:focus-visible::after { transform: scaleX(1); }
+  .site-header__nav a:hover { color: var(--color-accent); }
+
+  .site-header__tools { align-items: center; gap: var(--space-4); }
+  .site-header__tool { min-width: 2.75rem; min-height: 2.75rem; justify-content: center; color: var(--color-muted); }
+  .site-header__tool:hover { color: var(--color-text); }
+  .site-header__lang { display: inline-flex; align-items: center; font-size: var(--fs-cap); }
+  .site-header__lang-on { font-weight: 700; padding-inline: var(--space-1); }
+  .site-header__phone { font-size: 1.125rem; text-decoration: none; white-space: nowrap; min-height: 2.75rem; display: inline-flex; align-items: center; }
+  .site-header__phone:hover { color: var(--color-accent); text-decoration: underline; text-underline-offset: 0.2em; }
+
+  .site-header__icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.75rem; height: 2.75rem; border-radius: var(--radius); color: var(--color-text);
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+  .site-header__icon:hover { background: var(--color-well); }
+  .site-header__icon:active { background: var(--color-rule); }
+
+  .menu { position: static; }
+  .menu__toggle { list-style: none; cursor: pointer; }
+  .menu__toggle::-webkit-details-marker { display: none; }
+  .menu__close { display: none; }
+  .menu[open] .menu__open { display: none; }
+  .menu[open] .menu__close { display: block; }
+  .menu__panel {
+    position: fixed; left: 0; right: 0; top: var(--header-h); bottom: 0;
+    overflow-y: auto; overscroll-behavior: contain;
+    background: var(--color-bg); border-bottom: var(--rule-w) solid var(--color-rule);
+    padding: var(--space-2) var(--space) var(--space-6);
+    display: grid; gap: var(--space-5);
+  }
+  .menu__nav a {
+    display: flex; align-items: center; min-height: 3.25rem;
+    font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h3);
+    text-decoration: none; border-bottom: var(--rule-w) solid var(--color-rule); white-space: nowrap;
+  }
+  .menu__channels { display: grid; gap: var(--space-1); }
+  .menu__channels a { display: flex; align-items: center; gap: var(--space-3); min-height: 2.75rem; text-decoration: none; }
+  .menu__channels a:hover { color: var(--color-accent); }
+  .menu__extra { display: flex; flex-wrap: wrap; gap: var(--space-5); color: var(--color-muted); }
+
+  @media (min-width: 64em) {
+    .site-header__tools { display: flex; }
+    .site-header__tools .future-link, .site-header__lang { display: none; }
+    .site-header__call { display: none; }
+  }
+  @media (min-width: 80em) {
+    .site-header__nav, .site-header__tools { display: flex; }
+    .site-header__nav { margin-right: auto; }
+    .site-header__logo { margin-right: var(--space-4); }
+    .site-header__logo img { width: 9.75rem; }
+    .site-header__call, .menu { display: none; }
+  }
+  @media (min-width: 90em) {
+    .site-header__tools .future-link, .site-header__lang { display: inline-flex; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header__nav a::after { transition: none; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  const menu = document.querySelector<HTMLDetailsElement>("[data-menu]");
+  if (header) {
+    const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+  if (menu) {
+    const close = () => menu.removeAttribute("open");
+    // Tap on the empty part of the full-screen panel, or anywhere outside the menu, closes it.
+    menu.querySelector(".menu__panel")?.addEventListener("click", (e) => { if (e.target === e.currentTarget) close(); });
+    document.addEventListener("click", (e) => { if (menu.open && !menu.contains(e.target as Node)) close(); });
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => menu.removeAttribute("open")));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.open) {
+        menu.removeAttribute("open");
+        menu.querySelector("summary")?.focus();
+      }
+    });
+  }
+</script>

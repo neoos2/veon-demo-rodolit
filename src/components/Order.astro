@@ -1,0 +1,88 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { FUTURE_NOTE } from "../data/site";
+
+// Order and terms from the client's «Оплата і доставка» page (16.11.2026), facts W-F003, W-F004, W-F005.
+const steps = [
+  { value: "1", unit: "робочий день", text: "Менеджер надсилає рахунок-фактуру після запиту." },
+  { value: "3–5", unit: "календарних днів", text: "Оплата за рахунком у гривні, з ПДВ або без ПДВ." },
+  { value: "5–7", unit: "робочих днів", text: "Відвантаження після оплати." },
+  { value: "По Україні", unit: "", text: "Власним транспортом, «Новою поштою» або самовивіз зі складу." },
+];
+const terms = [
+  { k: "Мінімальна сума замовлення", v: "4 500 грн" },
+  { k: "Оплата", v: "Лише безготівково за рахунком. Онлайн-оплата карткою не передбачена." },
+  { k: "Документи поставки", v: "Рахунок-фактура, видаткова накладна, гарантійний талон." },
+  { k: "Наявність", v: "Частина товарів у наявності, решта під замовлення з України або від виробника. Наявність і строки підтверджує менеджер." },
+  { k: "Доставка", v: "Власним транспортом (крім окупованих територій і територій бойових дій), «Новою поштою» за тарифами перевізника або самовивіз." },
+  { k: "Гарантія", v: "Від виробника, строк залежить від моделі. Сервіс та гарантія: окремий номер у контактах." },
+];
+---
+<Section id="order" rec="R-UX-012" class="order">
+  <div class="container">
+    <div class="section-head">
+      <h2>Умови поставки</h2>
+      <p>Порядок від запиту до доставки. Строки рахуються з дня запиту та з дня оплати.</p>
+    </div>
+
+    <ol class="terms-strip">
+      {steps.map((s) => (
+        <li class="terms-strip__step">
+          <p class="terms-strip__value num">{s.value}</p>
+          <p class="terms-strip__unit">{s.unit}</p>
+          <p class="terms-strip__text">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <dl class="terms">
+      {terms.map((t) => (
+        <div class="terms__row">
+          <dt>{t.k}</dt>
+          <dd class:list={[t.k.startsWith("Мінімальна") && "num terms__big"]}>{t.v}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="order__more">
+      <FutureLink note={FUTURE_NOTE} class="fl-quiet">Оплата і доставка</FutureLink>
+      <FutureLink note={FUTURE_NOTE} class="fl-quiet">Гарантія та сервіс</FutureLink>
+      <FutureLink note={FUTURE_NOTE} class="fl-quiet">Обмін та повернення</FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style is:global>
+  .order { padding-block: var(--space-section-sm) var(--space-section); border-top: var(--rule-w) solid var(--color-rule); }
+  .order .section-head { margin-bottom: var(--space-6); }
+
+  .terms-strip { display: grid; border-top: var(--rule-w) solid var(--color-text); counter-reset: step; }
+  .terms-strip__step { display: grid; gap: var(--space-2); padding-block: var(--space-5); border-bottom: var(--rule-w) solid var(--color-rule); }
+  .terms-strip__value { font-size: var(--fs-h2); line-height: 1; align-self: end; }
+  .terms-strip__unit { font-weight: 700; }
+  .terms-strip__unit:empty { display: none; }
+  .terms-strip__text { color: var(--color-muted); max-width: 22rem; }
+
+  .terms { margin: var(--space-7) 0 0; display: grid; column-gap: var(--space-7); }
+  .terms__row { display: grid; gap: var(--space-1); padding-block: var(--space-4); border-bottom: var(--rule-w) solid var(--color-rule); }
+  .terms dt { font-size: var(--fs-cap); color: var(--color-muted); }
+  .terms dd { margin: 0; }
+  .terms__big { font-size: var(--fs-h3); line-height: 1.1; }
+
+  .order__more { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); margin-top: var(--space-6); color: var(--color-muted); }
+
+  @media (min-width: 48em) {
+    .terms-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+    /* Each step spans three shared rows (number, unit, text) so captions sit on one line across the strip. */
+    .terms-strip__step { grid-row: span 3; grid-template-rows: subgrid; row-gap: var(--space-2); }
+    .terms-strip__unit:empty { display: block; }
+    .terms { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 64em) {
+    .terms-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .terms-strip__step { border-bottom: 0; padding-right: var(--space-5); }
+    .terms-strip__step + .terms-strip__step { border-left: var(--rule-w) solid var(--color-rule); padding-left: var(--space-5); }
+    .terms__row { grid-template-columns: 13rem minmax(0, 1fr); column-gap: var(--space-5); align-items: baseline; }
+  }
+</style>

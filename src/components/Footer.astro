@@ -1,0 +1,72 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { contacts, FUTURE_NOTE, mailto } from "../data/site";
+
+const info = ["Про компанію", "Оплата і доставка", "Гарантія та сервіс", "Обмін та повернення", "Сертифікати та документи", "Виробники", "Політика конфіденційності"];
+---
+<footer id="footer" class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__col">
+      <p class="site-footer__name">{contacts.legalName}</p>
+      <p>Код ЄДРПОУ <span class="num">{contacts.edrpou}</span>, платник ПДВ</p>
+      <p>{contacts.address}</p>
+      <p>Медичне й реабілітаційне обладнання з доставкою по всій Україні.</p>
+    </div>
+
+    <div class="site-footer__col">
+      <p class="site-footer__label">Контакти</p>
+      <ul class="site-footer__list">
+        <li>Продаж: <a href={contacts.sales.href} class="num">{contacts.sales.text}</a></li>
+        <li>Сервіс: <a href={contacts.service.href} class="num">{contacts.service.text}</a></li>
+        <li>Месенджери: <a href={contacts.viber}>Viber</a>, <a href={contacts.telegram}>Telegram</a></li>
+        <li><a href={mailto("Запит КП")}>{contacts.email}</a></li>
+        <li>{contacts.hours}</li>
+      </ul>
+    </div>
+
+    <nav class="site-footer__col" aria-label="Інформація">
+      <p class="site-footer__label">Інформація</p>
+      <ul class="site-footer__list">
+        {info.map((t) => <li><FutureLink note={FUTURE_NOTE} class="fl-quiet">{t}</FutureLink></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-footer__col">
+      <p class="site-footer__label">Ми в мережах</p>
+      <ul class="site-footer__social">
+        <li><a href={contacts.telegramChannel}><Icon name="telegram" />Telegram-канал</a></li>
+        <li><a href={contacts.instagram}><Icon name="instagram" />Instagram</a></li>
+        <li><a href={contacts.youtube}><Icon name="youtube" />YouTube</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__base">
+    <p>© 2026 {contacts.legalName}</p>
+    <a href="#hero" class="site-footer__top">На початок сторінки</a>
+  </div>
+</footer>
+
+<style is:global>
+  .site-footer { background: var(--color-well); padding-block: var(--space-7) var(--space-5); font-size: var(--fs-body); }
+  .site-footer__grid { display: grid; gap: var(--space-6); }
+  .site-footer__col { display: grid; gap: var(--space-2); align-content: start; }
+  .site-footer__name { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h3); line-height: 1.15; margin-bottom: var(--space-2); }
+  .site-footer__label { font-size: var(--fs-cap); color: var(--color-muted); }
+  .site-footer__list { display: grid; gap: var(--space-1); }
+  .site-footer__list a, .site-footer__social a, .site-footer__top { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: var(--color-control); }
+  .site-footer__list a:hover, .site-footer__social a:hover, .site-footer__top:hover { color: var(--color-accent); text-decoration-color: currentColor; }
+  .site-footer__list .fl-quiet { min-height: 2.75rem; }
+  .site-footer__social { display: grid; gap: var(--space-1); }
+  .site-footer__social a { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 2.75rem; white-space: nowrap; }
+  .site-footer__list a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+  .site-footer__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3); margin-top: var(--space-7); padding-top: var(--space-4); border-top: var(--rule-w) solid var(--color-rule); font-size: var(--fs-cap); color: var(--color-muted); }
+  .site-footer__top { display: inline-flex; align-items: center; min-height: 2.75rem; }
+
+  @media (min-width: 48em) {
+    .site-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 64em) {
+    .site-footer__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr) minmax(0, 2fr); column-gap: var(--gutter); }
+  }
+</style>

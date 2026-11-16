@@ -1,0 +1,117 @@
+---
+import { Picture } from "astro:assets";
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { contacts, FUTURE_NOTE, SNAPSHOT_DATE } from "../data/site";
+import lgt from "../assets/products/lgt-5100d.jpg";
+import k12 from "../assets/products/k12-base.jpg";
+import yk from "../assets/products/yk-8000d.jpg";
+import pc from "../assets/products/pc-1000.jpg";
+import cygnus from "../assets/products/cygnus-70.jpg";
+
+// Names, prices and stock status copied from the client's product pages on 16.11.2026.
+const lead = { img: lgt, name: "Активно-пасивний тренажер", model: "LGT-5100D", price: "355 000 грн", stock: "В наявності" };
+const rows = [
+  { img: k12, name: "Монітор пацієнта K12 base Creative Medical", model: "K12 base", price: "48 700 грн", stock: "В наявності" },
+  { img: yk, name: "Багатопараметричний монітор пацієнта", model: "YK-8000D", price: "91 673 грн", stock: "В наявності" },
+  { img: pc, name: "Центральна станція моніторингу PC-1000 Creative Medical", model: "PC-1000", price: "39 700 грн", stock: "В наявності" },
+  { img: cygnus, name: "Автоматизована 3D-система ультразвукової діагностики молочних залоз Cygnus 70 Focus & Fusion", model: "Cygnus 70", price: null, stock: "В наявності" },
+];
+---
+<Section id="catalog" rec="R-UX-007,R-SEO-004" class="catalog">
+  <div class="container">
+    <div class="catalog__head">
+      <div class="section-head">
+        <h2>Позиції з каталогу</h2>
+        <p>Ціни та наявність з каталогу на {SNAPSHOT_DATE}. Актуальну ціну, строки й умови підтверджує менеджер.</p>
+      </div>
+      <FutureLink note={FUTURE_NOTE} class="btn btn--secondary catalog__all future-link--end">Увесь каталог</FutureLink>
+    </div>
+
+    <div class="catalog__grid">
+      <article class="lead-item">
+        <div class="lead-item__plate">
+          <Picture src={lead.img} formats={["avif", "webp"]} widths={[320, 480, 640, 800]} sizes="(min-width: 64em) 36vw, 90vw" alt={`${lead.name} ${lead.model}`} width={800} height={800} loading="lazy" decoding="async" />
+        </div>
+        <div class="lead-item__body">
+          <h3>{lead.name} <span class="nowrap">{lead.model}</span></h3>
+          <p class="lead-item__price num">{lead.price}</p>
+          <p class="cap">{lead.stock}</p>
+          <a class="text-link" href={contacts.viber}><Icon name="viber" />Запитати ціну у Viber</a>
+        </div>
+      </article>
+
+      <ul class="spec" aria-label="Інші позиції">
+        {rows.map((r) => (
+          <li class="spec-row">
+            <div class="spec-row__plate">
+              <Picture src={r.img} formats={["avif", "webp"]} widths={[120, 240]} sizes="120px" alt={r.name} width={240} height={240} loading="lazy" decoding="async" />
+            </div>
+            <div class="spec-row__main">
+              <h3 class="spec-row__name">{r.name}</h3>
+              <p class="cap">Модель {r.model}. {r.stock}</p>
+            </div>
+            <p class:list={["spec-row__price", r.price ? "num" : "spec-row__price--ask"]}>{r.price ?? "Ціну уточнюйте"}</p>
+            <a class="text-link spec-row__ask" href={contacts.viber}><Icon name="viber" />Запитати ціну</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</Section>
+
+<style is:global>
+  .catalog { padding-block: 0 var(--space-section); }
+  .catalog__head { display: grid; gap: var(--space-5); align-items: end; margin-bottom: var(--space-6); }
+  .catalog__all { justify-self: start; }
+  .catalog__grid { display: grid; gap: var(--space-6); }
+  .nowrap { white-space: nowrap; }
+
+  .lead-item { display: grid; gap: var(--space-5); align-content: start; }
+  .lead-item__plate { background: var(--color-plate); border-radius: var(--radius); padding: var(--space-5); }
+  .lead-item__plate img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+  .lead-item__body { display: grid; gap: var(--space-2); justify-items: start; }
+  .lead-item__price { font-size: var(--fs-h2); line-height: 1.1; margin-top: var(--space-2); }
+
+  .spec { border-top: var(--rule-w) solid var(--color-text); }
+  .spec-row {
+    position: relative;
+    display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); column-gap: var(--space-4); row-gap: var(--space-2);
+    padding-block: var(--space-5); border-bottom: var(--rule-w) solid var(--color-rule);
+    transition: background-color var(--dur-press) var(--ease-out);
+  }
+  .spec-row::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: calc(-1 * var(--rule-w)); height: var(--rule-w);
+    background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-line) var(--ease-out);
+  }
+  .spec-row:hover::after, .spec-row:focus-within::after { transform: scaleX(1); }
+  .spec-row__plate { grid-row: span 3; background: var(--color-plate); border-radius: var(--radius); padding: var(--space-2); align-self: start; }
+  .spec-row__plate img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+  .spec-row__main { display: grid; gap: var(--space-1); }
+  .spec-row__name { font-family: var(--font-body); font-weight: 700; font-size: var(--fs-body); line-height: 1.35; letter-spacing: 0; }
+  .spec-row__price { font-size: var(--fs-h3); line-height: 1.1; }
+  .spec-row__price--ask { font-family: var(--font-body); font-weight: 700; font-size: var(--fs-lead); color: var(--color-muted); white-space: nowrap; }
+  .spec-row__ask { justify-self: start; }
+
+  @media (min-width: 48em) {
+    .catalog__head { grid-template-columns: minmax(0, 1fr) auto; }
+    .spec-row { grid-template-columns: 7.5rem minmax(0, 1fr) 10rem; align-items: center; }
+    .spec-row__plate { grid-row: span 2; }
+    .spec-row__main { grid-column: 2; }
+    .spec-row__price { grid-column: 3; grid-row: 1; justify-self: end; text-align: right; }
+    .spec-row__ask { grid-column: 3; grid-row: 2; justify-self: end; }
+  }
+  @media (min-width: 64em) {
+    .catalog__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: start; }
+    .lead-item { grid-column: 1 / span 5; }
+    .spec { grid-column: 7 / span 6; }
+  }
+  @media (hover: none) {
+    .spec-row::after { display: none; }
+    .spec-row:active { background: var(--color-well); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .spec-row::after { transition: none; }
+  }
+</style>

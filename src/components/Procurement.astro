@@ -1,0 +1,206 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { contacts, FUTURE_NOTE, mailto } from "../data/site";
+
+const paths = [
+  {
+    id: "tender",
+    tab: "Тендерна закупівля",
+    title: "Тендерна закупівля",
+    who: "Для комунальних і державних закладів.",
+    facts: [
+      "Тендерний супровід: участь у публічних закупівлях через Prozorro.",
+      "Допомога з тендерною документацією.",
+      "Сертифікати та декларації відповідності на обладнання надаємо для тендерів.",
+    ],
+    action: { href: mailto("Тендерний запит"), text: "Тендерний запит", icon: "mail" as const },
+    future: "Тендерні закупівлі",
+  },
+  {
+    id: "uf",
+    tab: "Ukraine Facility",
+    title: "Ukraine Facility",
+    who: "Для закладів, що закуповують у межах програми.",
+    facts: [
+      "213 позицій у переліку обладнання, доступного для закупівель у межах програми Ukraine Facility.",
+      "Умови закупівлі за програмою уточніть у менеджера.",
+    ],
+    action: { href: contacts.sales.href, text: "Уточнити умови", icon: "phone" as const },
+    future: "Перелік Ukraine Facility",
+  },
+  {
+    id: "direct",
+    tab: "Прямий рахунок і оснащення",
+    title: "Прямий рахунок і комплексне оснащення",
+    who: "Для приватних клінік, реабілітаційних центрів, благодійних фондів і міжнародних організацій.",
+    facts: [
+      "Окремі апарати або комплексне оснащення медичних відділень і центрів реабілітації.",
+      "Рахунок-фактура за 1 робочий день, оплата з ПДВ або без ПДВ.",
+    ],
+    action: { href: contacts.viber, text: "Написати у Viber", icon: "viber" as const },
+    future: "Комплексне оснащення",
+  },
+];
+---
+<Section id="procurement" rec="R-UX-005" class="procurement">
+  <div class="container procurement__inner">
+    <div class="section-head">
+      <h2>Як закупити в Родоліт</h2>
+      <p>Три шляхи закупівлі. Оберіть свій, щоб побачити, що робимо ми і з чого почати.</p>
+    </div>
+
+    <div class="paths" data-tabs>
+      <div class="paths__tabs" role="tablist" aria-label="Шляхи закупівлі" hidden>
+        {paths.map((p, i) => (
+          <button type="button" role="tab" class="paths__tab" id={`tab-${p.id}`} aria-controls={`path-${p.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{p.tab}</button>
+        ))}
+        <span class="paths__indicator" aria-hidden="true"></span>
+      </div>
+
+      {paths.map((p, i) => (
+        <details class="path" id={`path-${p.id}`} name="path" open={i === 0}>
+          <summary class="path__summary">
+            <h3>{p.title}</h3>
+            <Icon name="chevron" size={22} class="path__chevron" />
+          </summary>
+          <div class="path__body">
+            <p class="path__who">{p.who}</p>
+            <ul class="path__facts">
+              {p.facts.map((f) => <li>{f}</li>)}
+            </ul>
+            <div class="path__actions">
+              <a class="btn btn--primary" href={p.action.href}><Icon name={p.action.icon} />{p.action.text}</a>
+              <FutureLink note={FUTURE_NOTE} class="fl-quiet">{p.future}</FutureLink>
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</Section>
+
+<style is:global>
+  .procurement { background: var(--color-well); padding-block: var(--space-section-sm); }
+  .procurement__inner { display: grid; gap: var(--space-6); }
+
+  .paths { display: grid; gap: var(--space-3); }
+  .path { background: var(--color-bg); border-radius: var(--radius); }
+  .path__summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+    min-height: 3.5rem; padding: var(--space-4) var(--space-5); cursor: pointer; list-style: none;
+  }
+  .path__summary::-webkit-details-marker { display: none; }
+  .path__summary h3 { font-size: var(--fs-h3); }
+  .path__summary:hover h3 { color: var(--color-accent); }
+  .path__chevron { flex: none; color: var(--color-accent); transition: transform var(--dur-line) var(--ease-out); }
+  .path[open] .path__chevron { transform: rotate(180deg); }
+  .path__body { display: grid; gap: var(--space-5); padding: 0 var(--space-5) var(--space-6); }
+  .path__who { font-size: var(--fs-lead); line-height: 1.45; }
+  .path__facts { display: grid; gap: var(--space-3); max-width: 40rem; }
+  .path__facts li { padding-left: var(--space-5); position: relative; }
+  .path__facts li::before { content: ""; position: absolute; left: 0; top: 0.75em; width: var(--space-3); height: var(--rule-w); background: var(--color-text); }
+  .path__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5); }
+
+  /* Tabs mode (JS, wide screens): the three paths become one switchable panel. */
+  .paths__tabs { position: relative; display: none; gap: var(--space-6); border-bottom: var(--rule-w) solid var(--color-control); }
+  .paths__tab {
+    appearance: none; background: none; border: 0; padding: var(--space-4) 0; margin: 0; cursor: pointer;
+    font: 700 var(--fs-lead)/1.2 var(--font-body); color: var(--color-muted);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .paths__tab:hover, .paths__tab[aria-selected="true"] { color: var(--color-text); }
+  .paths__indicator {
+    position: absolute; left: 0; bottom: calc(-1 * var(--rule-w)); width: 1px; height: var(--ring-w);
+    background: var(--color-accent); transform-origin: left;
+    transform: translateX(var(--ind-x, 0px)) scaleX(var(--ind-w, 0));
+    transition: transform var(--dur-line) var(--ease-out);
+  }
+  .paths.is-tabs { gap: 0; }
+  .paths.is-tabs .paths__tabs { display: flex; }
+  .paths.is-tabs .path { border-radius: 0 0 var(--radius) var(--radius); }
+  .paths.is-tabs .path__summary { display: none; }
+  .paths.is-tabs .path__body { padding: var(--space-6) var(--space-6) var(--space-7); grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-7); animation: path-in var(--dur-line) var(--ease-out); }
+  .paths.is-tabs .path__who { grid-column: 1; grid-row: 1 / span 2; font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h3); line-height: 1.2; }
+  .paths.is-tabs .path__facts { grid-column: 2; grid-row: 1; }
+  .paths.is-tabs .path__actions { grid-column: 2; grid-row: 2; }
+  .paths.is-tabs .path[hidden] { display: none; }
+  @keyframes path-in { from { opacity: 0; } to { opacity: 1; } }
+
+  /* No JS, wide screens: three columns, all readable. */
+  @media (min-width: 64em) {
+    html:not(.js) .paths { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .paths__indicator, .path__chevron { transition: none; }
+    .paths.is-tabs .path__body { animation: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-tabs]");
+  if (root) {
+    const list = root.querySelector<HTMLElement>("[role=tablist]")!;
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[role=tab]"));
+    const panels = Array.from(root.querySelectorAll<HTMLDetailsElement>("details.path"));
+    const ind = root.querySelector<HTMLElement>(".paths__indicator")!;
+    const mq = window.matchMedia("(min-width: 64em)");
+    let current = 0;
+
+    const moveIndicator = () => {
+      const t = tabs[current];
+      ind.style.setProperty("--ind-x", `${t.offsetLeft}px`);
+      ind.style.setProperty("--ind-w", `${t.offsetWidth}`);
+    };
+    const select = (i: number, focus = false) => {
+      current = i;
+      tabs.forEach((t, k) => {
+        t.setAttribute("aria-selected", String(k === i));
+        t.tabIndex = k === i ? 0 : -1;
+      });
+      panels.forEach((p, k) => { p.hidden = k !== i; });
+      if (focus) tabs[i].focus();
+      moveIndicator();
+    };
+    const apply = () => {
+      if (mq.matches) {
+        root.classList.add("is-tabs");
+        list.hidden = false;
+        panels.forEach((p, k) => {
+          p.removeAttribute("name");
+          p.open = true;
+          p.setAttribute("role", "tabpanel");
+          p.setAttribute("aria-labelledby", `tab-${p.id.replace("path-", "")}`);
+          p.hidden = k !== current;
+        });
+        moveIndicator();
+      } else {
+        root.classList.remove("is-tabs");
+        list.hidden = true;
+        panels.forEach((p, k) => {
+          p.hidden = false;
+          p.setAttribute("name", "path");
+          p.removeAttribute("role");
+          p.removeAttribute("aria-labelledby");
+          p.open = k === current;
+        });
+      }
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(i));
+      t.addEventListener("keydown", (e) => {
+        const n = tabs.length;
+        if (e.key === "ArrowRight") { e.preventDefault(); select((i + 1) % n, true); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); select((i - 1 + n) % n, true); }
+        if (e.key === "Home") { e.preventDefault(); select(0, true); }
+        if (e.key === "End") { e.preventDefault(); select(n - 1, true); }
+      });
+    });
+    panels.forEach((p, k) => p.addEventListener("toggle", () => { if (p.open && !mq.matches) current = k; }));
+    mq.addEventListener("change", apply);
+    window.addEventListener("resize", () => { if (mq.matches) moveIndicator(); }, { passive: true });
+    document.fonts?.ready.then(() => { if (mq.matches) moveIndicator(); });
+    apply();
+  }
+</script>

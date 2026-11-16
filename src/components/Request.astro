@@ -1,0 +1,115 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { contacts, letterLines, mailto } from "../data/site";
+
+const letters = [
+  { subject: "Запит КП", label: "Запит КП" },
+  { subject: "Тендерний запит", label: "Тендерний запит" },
+  { subject: "Оснащення відділення", label: "Оснащення відділення" },
+];
+---
+<Section id="request" class="request">
+  <div class="container request__grid">
+    <div class="request__channels">
+      <h2>Запит ціни, КП або документів</h2>
+      <p class="request__intro">Напишіть або зателефонуйте з понеділка по п’ятницю, 9:00–18:00.</p>
+
+      <div class="channel">
+        <h3 class="channel__title">Продаж</h3>
+        <a class="channel__value num" href={contacts.sales.href}>{contacts.sales.text}</a>
+        <p class="channel__note">Ціни, наявність, рахунок.</p>
+      </div>
+      <div class="channel channel--minor">
+        <h3 class="channel__title">Сервіс та гарантія</h3>
+        <a class="channel__value num" href={contacts.service.href}>{contacts.service.text}</a>
+      </div>
+      <div class="channel">
+        <h3 class="channel__title">Viber або Telegram</h3>
+        <p class="channel__value num">{contacts.messenger.text}</p>
+        <div class="channel__buttons">
+          <a class="btn btn--line-inverse" href={contacts.viber}><Icon name="viber" />Viber</a>
+          <a class="btn btn--line-inverse" href={contacts.telegram}><Icon name="telegram" />Telegram</a>
+        </div>
+      </div>
+      <div class="channel">
+        <h3 class="channel__title">Тендери та КП</h3>
+        <a class="channel__value channel__value--mail" href={mailto("Запит КП")}>{contacts.email}</a>
+        <p class="channel__note">Тендерна документація, сертифікати, комерційні пропозиції.</p>
+      </div>
+      <p class="request__addr">Офіс: {contacts.address}</p>
+    </div>
+
+    <div class="sheet" data-rec="R-UX-005">
+      <div class="sheet__paper">
+        <p class="sheet__to">Кому: <span>{contacts.email}</span></p>
+        <p class="sheet__subject">Тема: <span data-sheet-subject>Запит КП</span></p>
+        <div class="sheet__body">
+          <p>Добрий день!</p>
+          <ul>
+            {letterLines.map((l) => <li><span>{l}</span><span class="sheet__blank" aria-hidden="true"></span></li>)}
+          </ul>
+        </div>
+      </div>
+      <p class="sheet__hint">Оберіть тему: лист відкриється у вашій пошті з цими пунктами.</p>
+      <div class="sheet__actions">
+        {letters.map((l, i) => (
+          <a class:list={["btn", i === 0 ? "btn--inverse" : "btn--line-inverse"]} href={mailto(l.subject)} data-subject={l.subject}><Icon name="mail" />{l.label}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style is:global>
+  .request { background: var(--color-field); color: var(--color-on-field); padding-block: var(--space-section); }
+  .request h2, .request h3 { color: var(--color-on-field); text-wrap: balance; }
+  .request :focus-visible { outline-color: var(--color-focus-on-field); }
+  .request__grid { display: grid; gap: var(--space-7); }
+  .request__channels { display: grid; gap: var(--space-5); align-content: start; }
+  .request__intro, .channel__note, .request__addr { color: var(--color-on-field-muted); }
+
+  .channel { display: grid; gap: var(--space-2); padding-top: var(--space-4); border-top: var(--rule-w) solid var(--color-on-field-muted); }
+  .request .channel__title { font-family: var(--font-body); font-weight: 700; font-size: var(--fs-body); letter-spacing: 0; color: var(--color-on-field-muted); }
+  .channel__value { font-size: var(--fs-h3); line-height: 1.2; color: var(--color-on-field); text-decoration: none; justify-self: start; overflow-wrap: anywhere; }
+  a.channel__value { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: var(--color-on-field-muted); }
+  a.channel__value:hover { text-decoration-color: var(--color-on-field); text-decoration-thickness: 2px; }
+  .channel__value--mail { font-family: var(--font-body); font-weight: 700; font-size: var(--fs-lead); }
+  .channel__buttons { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .channel--minor .channel__value { font-size: var(--fs-lead); }
+
+  .sheet { display: grid; gap: var(--space-4); align-content: start; }
+  .sheet__paper { background: var(--color-bg); color: var(--color-text); border-radius: var(--radius); padding: var(--space-5); display: grid; gap: var(--space-3); }
+  .sheet__to, .sheet__subject { padding-bottom: var(--space-3); border-bottom: var(--rule-w) solid var(--color-rule); color: var(--color-muted); overflow-wrap: anywhere; }
+  .sheet__to span, .sheet__subject span { color: var(--color-text); font-weight: 700; }
+  .sheet__subject span { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-h3); }
+  .sheet__body { display: grid; gap: var(--space-4); padding-top: var(--space-2); }
+  .sheet__body ul { display: grid; gap: var(--space-4); }
+  .sheet__body li { display: grid; gap: var(--space-2); }
+  .sheet__blank { display: block; height: var(--rule-w); background: var(--color-rule); margin-top: var(--space-3); }
+  .sheet__hint { color: var(--color-on-field-muted); }
+  .sheet__actions { display: grid; gap: var(--space-3); }
+  .sheet__actions .btn { width: 100%; }
+
+  @media (min-width: 40em) {
+    .sheet__actions { justify-items: start; }
+    .sheet__actions .btn { width: auto; min-width: 16rem; justify-content: flex-start; }
+  }
+  @media (min-width: 64em) {
+    .request__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .request__channels { grid-column: 1 / span 5; }
+    .sheet { grid-column: 7 / span 6; }
+    .sheet__paper { padding: var(--space-6); }
+  }
+</style>
+
+<script>
+  const subject = document.querySelector<HTMLElement>("[data-sheet-subject]");
+  if (subject) {
+    document.querySelectorAll<HTMLAnchorElement>(".sheet__actions [data-subject]").forEach((a) => {
+      const set = () => { subject.textContent = a.dataset.subject ?? ""; };
+      a.addEventListener("mouseenter", set);
+      a.addEventListener("focus", set);
+    });
+  }
+</script>
